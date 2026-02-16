@@ -1,5 +1,11 @@
 {-# LANGUAGE LambdaCase #-}
-module Tennis where
+module Tennis
+  ( point
+  , score
+  , newGame
+  , Player(..)
+  , Game
+  ) where
 
 data Player = Player1 | Player2
   deriving (Eq, Show)
@@ -67,62 +73,3 @@ showPoints = \case
   Love    -> "love"
   Fifteen -> "15"
   Thirty  -> "30"
-
-
--- Test --
-
-data TestResult = Pass | Fail String deriving (Eq)
-
-scoreSequence :: [Player] -> Game
-scoreSequence = foldl point newGame
-
-runTest :: String -> Bool -> IO ()
-runTest name True  = putStrLn $ "  ✓ " ++ name
-runTest name False = putStrLn $ "  ✗ FAIL: " ++ name
-
-testScore :: String -> [Player] -> String -> IO ()
-testScore name players expected =
-  let actual = score $ scoreSequence players
-      passed = actual == expected
-  in if passed
-     then runTest name True
-     else do
-       runTest name False
-       putStrLn $ "      Expected: " ++ expected
-       putStrLn $ "           Got: " ++ actual
-
-p1, p2 :: Player
-p1 = Player1
-p2 = Player2
-
-main :: IO ()
-main = do
-  putStrLn "Basic scoring:"
-  testScore "starts with love" [] "love - love"
-  testScore "p1 scores once" [p1] "15 - love"
-  testScore "p1 scores twice" [p1, p1] "30 - love"
-  testScore "p1 scores thrice" [p1, p1, p1] "40 - love"
-  testScore "p1 wins" [p1, p1, p1, p1] "Game P1"
-
-  putStrLn "\nPlayer 2 scoring:"
-  testScore "p2 scores once" [p2] "love - 15"
-  testScore "p2 scores twice" [p2, p2] "love - 30"
-  testScore "p2 scores thrice" [p2, p2, p2] "love - 40"
-  testScore "p2 wins" [p2, p2, p2, p2] "Game P2"
-
-  putStrLn "\nMixed scoring:"
-  testScore "15-15" [p1, p2] "15 - 15"
-  testScore "30-15" [p1, p1, p2] "30 - 15"
-  testScore "15-30" [p1, p2, p2] "15 - 30"
-  testScore "40-30" [p1, p1, p1, p2, p2] "40 - 30"
-  testScore "30-40" [p1, p1, p2, p2, p2] "30 - 40"
-
-  putStrLn "\nDeuce scenarios:"
-  let toDeuce = [p1, p1, p1, p2, p2, p2]
-  testScore "reach deuce" toDeuce "Deuce"
-  testScore "p1 advantage" (toDeuce ++ [p1]) "Advantage P1"
-  testScore "p1 wins from advantage" (toDeuce ++ [p1, p1]) "Game P1"
-  testScore "p2 advantage" (toDeuce ++ [p2]) "Advantage P2"
-  testScore "p2 wins from advantage" (toDeuce ++ [p2, p2]) "Game P2"
-  testScore "back to deuce from adv" (toDeuce ++ [p1, p2]) "Deuce"
-  testScore "deuce loop" (toDeuce ++ [p1, p2, p2, p1]) "Deuce"

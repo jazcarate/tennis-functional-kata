@@ -10,8 +10,8 @@
     ```
 3. Compile and run in one step:
     ```bash
-    runghc Tennis.hs
+    runghc Test.hs
     ```
 
 ### Online
-Alternatively, paste `Tennis.hs` to [Haskell Playground](https://play.haskell.org/).
+Alternatively, paste the `.hs`s to [Haskell Playground](https://play.haskell.org/).
