@@ -4,7 +4,6 @@ import Tennis
 
 data TestResult = Pass | Fail String deriving (Eq)
 
-scoreSequence :: [Player] -> Game
 scoreSequence = foldl point newGame
 
 runTest :: String -> Bool -> IO ()

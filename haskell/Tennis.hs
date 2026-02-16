@@ -4,7 +4,6 @@ module Tennis
   , score
   , newGame
   , Player(..)
-  , Game
   ) where
 
 data Player = Player1 | Player2
