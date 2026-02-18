@@ -39,6 +39,16 @@ The rules for showing the score are:
 > If the player with advantage score the point they win the game.
 > If the player without advantage scores the point they are back at deuce.
 
+### General Concerns?
+
+Even though this is "Functional Programming" kata, it does not mean that you can't use objects, or any abstraction that your programming language allows.
+
+Representing the different states as inherited from a common state that know how to transition to others is a valid solution to this kata.
+
+```java
+sealed interface GameState permits PointsState, FortyState, DeuceState, AdvantageState, WonState {…}
+```
+
 ## Design Concerns
 
 1. What should happen if a player scores a point, and the game was already won? (note point 7 of Functional Calisthenics)

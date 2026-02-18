@@ -4,22 +4,23 @@ import Tennis
 
 data TestResult = Pass | Fail String deriving (Eq)
 
+scoreSequence :: [Player] -> Game
 scoreSequence = foldl point newGame
 
 runTest :: String -> Bool -> IO ()
-runTest name True  = putStrLn $ "  ✓ " ++ name
+runTest name True = putStrLn $ "  ✓ " ++ name
 runTest name False = putStrLn $ "  ✗ FAIL: " ++ name
 
 testScore :: String -> [Player] -> String -> IO ()
 testScore name players expected =
   let actual = score $ scoreSequence players
       passed = actual == expected
-  in if passed
-     then runTest name True
-     else do
-       runTest name False
-       putStrLn $ "      Expected: " ++ expected
-       putStrLn $ "           Got: " ++ actual
+   in if passed
+        then runTest name True
+        else do
+          runTest name False
+          putStrLn $ "      Expected: " ++ expected
+          putStrLn $ "           Got: " ++ actual
 
 main :: IO ()
 main = do
@@ -52,3 +53,23 @@ main = do
   testScore "Player2 wins from advantage" (toDeuce ++ [Player2, Player2]) "Game P2"
   testScore "back to deuce from adv" (toDeuce ++ [Player1, Player2]) "Deuce"
   testScore "deuce loop" (toDeuce ++ [Player1, Player2, Player2, Player1]) "Deuce"
+
+  putStrLn "\nDeuce stress tests:"
+  testScore "long deuce rally - 5 loops back to deuce"
+    (toDeuce ++ [Player1, Player2, Player1, Player2, Player1, Player2, Player1, Player2, Player1, Player2])
+    "Deuce"
+  testScore "10 deuce loops then P1 advantage"
+    (toDeuce ++ concat (replicate 10 [Player1, Player2]) ++ [Player1])
+    "Advantage P1"
+  testScore "10 deuce loops then P1 wins"
+    (toDeuce ++ concat (replicate 10 [Player1, Player2]) ++ [Player1, Player1])
+    "Game P1"
+  testScore "alternating advantages then P2 wins"
+    (toDeuce ++ [Player1, Player2, Player2, Player1, Player1, Player2, Player2, Player2])
+    "Game P2"
+  testScore "P1 advantage, back to deuce, P2 advantage, back to deuce"
+    (toDeuce ++ [Player1, Player2, Player2, Player1])
+    "Deuce"
+  testScore "many advantages for P1, then P2 catches up and wins"
+    (toDeuce ++ [Player1, Player2, Player1, Player2, Player1, Player2, Player2, Player2])
+    "Game P2"
