@@ -8,4 +8,7 @@ module Tennis
 where
 
 -- Change this import to test different implementations
-import Tennis.Function
+import Tennis.Union
+-- import Tennis.Fold
+-- import Tennis.Lens
+-- import Tennis.Function
