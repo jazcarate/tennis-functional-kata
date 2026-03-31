@@ -8,11 +8,10 @@ In this kata we will be focussing on "Functional Programming".
 Because the words "Functional Programming" mean different things to different people, I've come up with a set of rules to force what *I* think about when I say "Functional Programming". Feel free to ignore the term "Functional Programming", and instead think of it as a deliberate constrain.
 
 1. No mutable state. No reassignment.
-2. [Pure functions](https://en.wikipedia.org/wiki/Pure_function) internally.
-3. Side effects only at the boundaries.
+2. [Expressions](https://en.wikipedia.org/wiki/Expression_(computer_science)), not Statements. _All lines should return a value._
+3. [Pure functions](https://en.wikipedia.org/wiki/Pure_function) internally. Side effects only at the boundaries.
 4. No loops. Use recursion, `map`, `fold`, or other [higher-order functions](https://en.wikipedia.org/wiki/Higher-order_function).
 5. No `null`.
-6. [Expressions](https://en.wikipedia.org/wiki/Expression_(computer_science)), not Statements. _All lines should return a value._
 
 The term is a nod to *Object Calisthenics*. A set of 9 rules invented by Jeff Bay in their book **The ThoughtWorks Anthology** for "[…] better software design today".
 
@@ -31,6 +30,9 @@ Something akin to:
 
 ```java
 public interface TennisGame {
+	/**
+	 * e.g., "love-love", "15-love", "40-30", "deuce", "advantage Player 1", "Player 2 wins"
+	 */
 	String getScore();
 
 	void playerOneScores();
@@ -48,9 +50,9 @@ The rules for showing the score are:
 > If the player with advantage score the point they win the game.
 > If the player without advantage scores the point they are back at deuce.
 
-## Takeaways
+Note: The `playerOneScores` and `playerTwoScores` API contradicts point Functional Calisthenics #2. Feel free to change the API to something more Functional.
 
-When doing this kata, thinking about Functional Programming, I tend to ponder these questions:
+## Interesting Design Concerns
 
 1. What should happen if a player scores a point, and the game was already won?
 2. What is the _boundary_ of this kata? What is pure, and what needs side effects?
